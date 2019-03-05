@@ -7,10 +7,11 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>
-<h1>Nazioni:</h1><br>
 <body>
-	<c:forEach items="${lista}" var="nazioni">
-		<a href="citta?codiceNazione=${nazioni.code}">${nazioni.name}</a>
+	<h1>Citta:</h1>
+	<br>
+	<c:forEach items="${lista}" var="citta">
+		<a>${citta.name}&nbsp;</a><br>
 	</c:forEach>
 </body>
 </html>

@@ -10,7 +10,7 @@
 <h1>Continenti:</h1><br>
 <body>
 	<c:forEach items="${lista}" var="continenti">
-		<a href="nazioni/${continenti}">${continenti}</a>
+		<a href="nazioni?continente=${continenti}">${continenti}</a>
 	</c:forEach>
 </body>
 </html>

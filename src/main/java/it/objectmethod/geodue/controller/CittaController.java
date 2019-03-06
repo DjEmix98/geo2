@@ -51,6 +51,7 @@ public class CittaController {
 		try {
 			popolazioneInt = Integer.parseInt(popolazioneString);
 		}catch( NumberFormatException ex){
+			ex.printStackTrace();
 			popolazioneInt = 0;
 		}
 		}

@@ -8,4 +8,8 @@ public interface CittaDao {
 
 	List<Citta> findCittaByCode(String code);
 	List<Citta> findCittaByCityandFlag(Citta city, boolean flagOperator);
+	Citta findCittaById(int id);
+	void eliminaCitta(int id);
+	void modificaCitta(Citta city);
+	void inserisciCitta(Citta city);
 }

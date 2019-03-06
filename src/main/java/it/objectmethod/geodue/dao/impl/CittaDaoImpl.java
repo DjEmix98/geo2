@@ -49,5 +49,39 @@ public class CittaDaoImpl extends NamedParameterJdbcDaoSupport implements CittaD
 		listaCitta = getNamedParameterJdbcTemplate().query(sql, parametriQuery,rmCity);
 		return listaCitta;
 	}
+	@Override
+	public void eliminaCitta(int id) {
+		String sql="delete from city where id=?";
+		getJdbcTemplate().update(sql,new Object[]{id});
+	}
+	@Override
+	public void modificaCitta(Citta city) {
+		String sql="update city set name=:nome, countrycode=:codiceNazione, district=:regione, population=:popolazione where id=:id";
+		MapSqlParameterSource param = new MapSqlParameterSource();
+		param.addValue("nome", city.getName());
+		param.addValue("codiceNazione", city.getCountryCode());
+		param.addValue("regione", city.getDistrict());
+		param.addValue("popolazione", city.getPopulation());
+		param.addValue("id", city.getId());
+		getNamedParameterJdbcTemplate().update(sql, param);
+	}
+	@Override
+	public Citta findCittaById(int id) {
+		Citta citta = null;
+		String sql = "select name,countrycode,id,district,population from city where id = ? ";
+		BeanPropertyRowMapper <Citta>rmCitta = new BeanPropertyRowMapper<Citta>(Citta.class);
+		citta = getJdbcTemplate().queryForObject(sql, new Object[]{id} ,rmCitta);
+		return citta;
+	}
+	@Override
+	public void inserisciCitta(Citta city) {
+		String sql = "insert into city(name,countrycode,district,population) values(:nome,:codiceNazione,:regione,:popolazione)";
+		MapSqlParameterSource insert = new MapSqlParameterSource();
+		insert.addValue("nome", city.getName());
+		insert.addValue("codiceNazione", city.getCountryCode());
+		insert.addValue("regione", city.getDistrict());
+		insert.addValue("popolazione", city.getPopulation());
+		getNamedParameterJdbcTemplate().update(sql,insert);
+	}
 
 }

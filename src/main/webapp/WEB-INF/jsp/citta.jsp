@@ -10,12 +10,13 @@
 <body>
 	<h1>Citta:</h1>
 	<br>
+	<a href="form?id=0">Inserisci nuova citta</a>
 	<a href="continenti"style="color: black;">Torna alla home</a>
 	<a href="nazioni">Torna indietro</a>
 	<br>
 	<c:forEach items="${lista}" var="citta">
 		<a>${citta.name}&nbsp;</a>
-		<a href="modifica?id=${citta.id}" style="color:green;">Modifica</a>
+		<a href="form?id=${citta.id}" style="color:green;">Modifica</a>
 		<a href="elimina?id=${citta.id}"style="color: red;">Elimina</a>
 		<br>
 	</c:forEach>

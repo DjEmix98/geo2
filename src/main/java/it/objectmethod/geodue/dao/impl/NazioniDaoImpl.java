@@ -34,5 +34,15 @@ public class NazioniDaoImpl extends NamedParameterJdbcDaoSupport implements Nazi
 		listaNazioni=getJdbcTemplate().query(sql,new Object[]{continent},rmNazioni);
 		return listaNazioni;
 	}
+
+
+	@Override
+	public List<Nazione> findAllNazioni() {
+		List<Nazione> listaNazioni = null;
+		String sql = "select name, code, continent, population from country";
+		BeanPropertyRowMapper<Nazione> rmNazioni = new BeanPropertyRowMapper<Nazione>(Nazione.class);
+		listaNazioni = getNamedParameterJdbcTemplate().query(sql,rmNazioni);
+		return listaNazioni;
+	}
 	
 }

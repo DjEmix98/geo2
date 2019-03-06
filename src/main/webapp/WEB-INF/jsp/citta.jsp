@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<p>${error}</p>
 	<h1>Citta:</h1>
 	<br>
 	<a href="form?id=0">Inserisci nuova citta</a>

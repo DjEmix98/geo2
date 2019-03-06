@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<p>${error}</p>
 	<form action="insert">
 		<a href="citta">Torna indietro</a> <a href="continenti">Torna alla
 			home</a> <br> <select name="codiceNazione">

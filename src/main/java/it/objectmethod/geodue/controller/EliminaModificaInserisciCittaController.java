@@ -20,6 +20,10 @@ import it.objectmethod.geodue.model.Nazione;
 @Controller
 public class EliminaModificaInserisciCittaController {
 
+	private static final String MAPPING_INSERT = "/form";
+	private static final String MAPPING_CITTA = "/citta";
+	private static final String SUCCESS = "Inserito con successo!";
+	private static final String FAIL= "Errore, non puoi inserire un numero negativo o un carattere nel campo popolazione";
 	@Autowired
 	CittaDao cittaDao;
 	@Autowired
@@ -45,26 +49,35 @@ public class EliminaModificaInserisciCittaController {
 		return "inserisci-citta";
 	}
 	@RequestMapping("/insert")
-	public ModelAndView inserimentoDati(HttpServletRequest request,@PathParam("id") int id) {
+	public ModelAndView inserimentoDati(HttpServletRequest request,@PathParam("id") int id, ModelMap model) {
 		Citta city = new Citta();
-		int popolazioneInt;
+		String mapping = MAPPING_CITTA;
+		String risultato = SUCCESS;
+		int popolazioneInt=0;
 		try {
 			popolazioneInt = Integer.parseInt(request.getParameter("popolazione"));
 		}catch(NumberFormatException ex){
-			popolazioneInt=0;
+			mapping =  MAPPING_INSERT;
+			risultato = FAIL;
 			ex.printStackTrace();
+		}
+		if(popolazioneInt<0)
+		{
+			mapping = MAPPING_INSERT;
+			risultato = FAIL;
 		}
 		city.setId(id);
 		city.setName(request.getParameter("cittaNome"));
 		city.setPopulation(popolazioneInt);
 		city.setDistrict(request.getParameter("regione"));
 		city.setCountryCode(request.getParameter("codiceNazione"));
-		if(id==0){
+		if(id==0 && risultato.compareTo(SUCCESS)==0){
 			cittaDao.inserisciCitta(city);
 		}
-		else {
+		else if(id>0 && risultato.compareTo(SUCCESS)==0){
 			cittaDao.modificaCitta(city);
 		}
-		return new ModelAndView("forward:/citta");
+		model.addAttribute("error",risultato);
+		return new ModelAndView("forward:"+mapping,model);
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import it.objectmethod.geodue.dao.CittaDao;
 import it.objectmethod.geodue.model.Citta;
+import it.objectmethod.geodue.model.CityFind;
 @Service
 public class CittaDaoImpl extends NamedParameterJdbcDaoSupport implements CittaDao {
 
@@ -30,7 +31,7 @@ public class CittaDaoImpl extends NamedParameterJdbcDaoSupport implements CittaD
 		return listaCitta;
 	}
 	@Override
-	public List<Citta> findCittaByCityandFlag(Citta city, boolean flagOperator) {
+	public List<Citta> findCittaByCityandFlag(CityFind city, boolean flagOperator) {
 		List<Citta> listaCitta = null;
 		String sql = null;
 		if(flagOperator)
@@ -50,12 +51,13 @@ public class CittaDaoImpl extends NamedParameterJdbcDaoSupport implements CittaD
 		return listaCitta;
 	}
 	@Override
-	public void eliminaCitta(int id) {
+	public int eliminaCitta(int id) {
 		String sql="delete from city where id=?";
-		getJdbcTemplate().update(sql,new Object[]{id});
+		int ret = getJdbcTemplate().update(sql,new Object[]{id});
+		return ret;
 	}
 	@Override
-	public void modificaCitta(Citta city) {
+	public int modificaCitta(Citta city) {
 		String sql="update city set name=:nome, countrycode=:codiceNazione, district=:regione, population=:popolazione where id=:id";
 		MapSqlParameterSource param = new MapSqlParameterSource();
 		param.addValue("nome", city.getName());
@@ -63,7 +65,8 @@ public class CittaDaoImpl extends NamedParameterJdbcDaoSupport implements CittaD
 		param.addValue("regione", city.getDistrict());
 		param.addValue("popolazione", city.getPopulation());
 		param.addValue("id", city.getId());
-		getNamedParameterJdbcTemplate().update(sql, param);
+		int ret = getNamedParameterJdbcTemplate().update(sql, param);
+		return ret;
 	}
 	@Override
 	public Citta findCittaById(int id) {
@@ -74,14 +77,16 @@ public class CittaDaoImpl extends NamedParameterJdbcDaoSupport implements CittaD
 		return citta;
 	}
 	@Override
-	public void inserisciCitta(Citta city) {
+	public int inserisciCitta(Citta city) {
 		String sql = "insert into city(name,countrycode,district,population) values(:nome,:codiceNazione,:regione,:popolazione)";
 		MapSqlParameterSource insert = new MapSqlParameterSource();
 		insert.addValue("nome", city.getName());
 		insert.addValue("codiceNazione", city.getCountryCode());
 		insert.addValue("regione", city.getDistrict());
 		insert.addValue("popolazione", city.getPopulation());
-		getNamedParameterJdbcTemplate().update(sql,insert);
+		int ret = getNamedParameterJdbcTemplate().update(sql,insert);
+		
+		return ret;
 	}
 
 }

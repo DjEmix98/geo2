@@ -5,12 +5,12 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import it.objectmethod.geodue.dao.NazioniDao;
 import it.objectmethod.geodue.model.Nazione;
@@ -19,7 +19,7 @@ import it.objectmethod.geodue.model.Nazione;
 public class ContinentiNazioniController {
 	@Autowired
 	private NazioniDao nazioniDao;
-	 @RequestMapping("/continenti")
+	@RequestMapping("/continenti")
 	public String continenti(ModelMap model)
 	{ 
 		List<String> listaContinenti = new ArrayList<String>(); 
@@ -30,9 +30,9 @@ public class ContinentiNazioniController {
 		model.addAttribute("lista",listaContinenti);
 		return "continenti";
 	}
-	 @RequestMapping("/nazioni")
-	 public String nazioni(ModelMap model,@PathParam("continente")String continente, HttpServletRequest request)
-	 {
+	@RequestMapping("/nazioni")
+	public String nazioni(ModelMap model,@RequestParam("continente")String continente, HttpServletRequest request)
+	{
 		HttpSession session = request.getSession();
 		if(continente==null)
 		{
@@ -44,6 +44,6 @@ public class ContinentiNazioniController {
 		session.setAttribute("continente", continente);
 		model.addAttribute("lista",listaNazioni);
 		return "nazioni";
-		 
-	 }
+
+	}
 }

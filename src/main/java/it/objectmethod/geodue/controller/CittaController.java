@@ -11,11 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import it.objectmethod.geodue.dao.CittaDao;
 import it.objectmethod.geodue.model.Citta;
-import it.objectmethod.geodue.operatorvalue.OperatorValue;
 @Controller
 public class CittaController {
 
@@ -36,38 +34,38 @@ public class CittaController {
 		model.addAttribute("lista", listaCitta);
 		return "citta";
 	}
-	@RequestMapping("/ricerca")
-	public String ricercaCitta(@RequestParam("operatore") String operatore,@RequestParam("popolazione") String popolazioneString,HttpServletRequest request, ModelMap model)
-	{
-		Citta city = new Citta();
-		List<Citta> listaCitta = new ArrayList<Citta>();
-		String error=null;
-		int popolazioneInt;
-		if(popolazioneString.isEmpty())
-		{
-			popolazioneInt=0;
-		}
-		else {
-		try {
-			popolazioneInt = Integer.parseInt(popolazioneString);
-		}catch( NumberFormatException ex){
-			ex.printStackTrace();
-			popolazioneInt = 0;
-		}
-		}
-		if(popolazioneInt<0)
-		{
-			error=ERROR;
-		}
-		else {
-			city.setName("%"+request.getParameter("nomeCitta")+"%");
-			city.setCountryCode(request.getParameter("codiceNazione"));
-			city.setPopulation(popolazioneInt);
-			boolean bOperatore = OperatorValue.controlloDati(operatore);
-			listaCitta = cittaDao.findCittaByCityandFlag(city,bOperatore);
-		}
-		model.addAttribute("error", error);
-		model.addAttribute("list", listaCitta);
-		return "ricerca-citta";
-	}
+	//	@RequestMapping("/ricerca")
+	//	public String ricercaCitta(@RequestParam("operatore") String operatore,@RequestParam("popolazione") String popolazioneString,HttpServletRequest request, ModelMap model)
+	//	{
+	//		Citta city = new Citta();
+	//		List<Citta> listaCitta = new ArrayList<Citta>();
+	//		String error=null;
+	//		int popolazioneInt;
+	//		if(popolazioneString.isEmpty())
+	//		{
+	//			popolazioneInt=0;
+	//		}
+	//		else {
+	//		try {
+	//			popolazioneInt = Integer.parseInt(popolazioneString);
+	//		}catch( NumberFormatException ex){
+	//			ex.printStackTrace();
+	//			popolazioneInt = 0;
+	//		}
+	//		}
+	//		if(popolazioneInt<0)
+	//		{
+	//			error=ERROR;
+	//		}
+	//		else {
+	//			city.setName("%"+request.getParameter("nomeCitta")+"%");
+	//			city.setCountryCode(request.getParameter("codiceNazione"));
+	//			city.setPopulation(popolazioneInt);
+	//			boolean bOperatore = OperatorValue.controlloDati(operatore);
+	//			listaCitta = cittaDao.findCittaByCityandFlag(city,bOperatore);
+	//		}
+	//		model.addAttribute("error", error);
+	//		model.addAttribute("list", listaCitta);
+	//		return "ricerca-citta";
+	//	}
 }

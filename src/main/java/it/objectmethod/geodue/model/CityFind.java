@@ -8,6 +8,8 @@ public class CityFind {
 	private String operator;
 	private int id;
 	private int population;
+	private int populationMax;
+	private int populationMin;
 	public String getOperator() {
 		return operator;
 	}
@@ -44,5 +46,16 @@ public class CityFind {
 	public void setPopulation(int population) {
 		this.population = population;
 	}
-
+	public int getPopulationMax() {
+		return populationMax;
+	}
+	public void setPopulationMax(int populationMax) {
+		this.populationMax = populationMax;
+	}
+	public int getPopulationMin() {
+		return populationMin;
+	}
+	public void setPopulationMin(int populationMin) {
+		this.populationMin = populationMin;
+	}
 }

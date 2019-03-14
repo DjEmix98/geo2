@@ -5,8 +5,8 @@ public class Nazione {
 	private String name;
 	private String code;
 	private String continent;
-	private int Population;
-
+	private String surfaceArea;
+	private int population;
 	public String getName() {
 		return name;
 	}
@@ -26,9 +26,16 @@ public class Nazione {
 		this.continent = continent;
 	}
 	public int getPopulation() {
-		return Population;
+		return population;
 	}
 	public void setPopulation(int population) {
-		Population = population;
+		this.population = population;
+	}
+	public String getSurfaceArea() {
+		return surfaceArea;
+	}
+	public void setSurfaceArea(String surfaceArea) {
+		this.surfaceArea = surfaceArea;
 	}
 }
+

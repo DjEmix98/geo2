@@ -8,7 +8,7 @@ import it.objectmethod.geodue.model.CityFind;
 public interface CittaDao {
 
 	List<Citta> findCittaByCode(String codiceNazione);
-	List<Citta> findCittaByCityandFlag(CityFind city, boolean flagOperator);
+	List<Citta> findCittaByCity(CityFind city);
 	Citta findCittaById(int id);
 	int eliminaCitta(int id);
 	int modificaCitta(Citta city);

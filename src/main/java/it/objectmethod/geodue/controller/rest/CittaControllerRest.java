@@ -28,10 +28,14 @@ public class CittaControllerRest {
 	
 	@PostMapping("/ricerca")
 	public List<Citta> trovaCitta(@RequestBody CityFind city){
-
-		boolean bOperatore = OperatorValue.controlloDati(city.getOperator());
 		city.setName("%"+city.getName()+"%");
-		List<Citta> listaCitta = cittaDao.findCittaByCityandFlag(city, bOperatore);
+		System.out.println("countryCode: "+city.getCountryCode());
+		System.out.println("Min: "+city.getPopulationMin());
+		if(city.getCountryCode()==null)
+		{
+			city.setCountryCode("%%");
+		}
+		List<Citta> listaCitta = cittaDao.findCittaByCity(city);
 		return listaCitta;
 	}
 	

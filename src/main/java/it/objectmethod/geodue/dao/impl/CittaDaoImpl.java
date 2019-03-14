@@ -31,21 +31,20 @@ public class CittaDaoImpl extends NamedParameterJdbcDaoSupport implements CittaD
 		return listaCitta;
 	}
 	@Override
-	public List<Citta> findCittaByCityandFlag(CityFind city, boolean flagOperator) {
+	public List<Citta> findCittaByCity(CityFind city){
 		List<Citta> listaCitta = null;
-		String sql = null;
-		if(flagOperator)
-		{
-			sql = "select id, name, population, countrycode, district from city where name like :nome and (population>:popolazione or :popolazione=0) and countrycode=:codiceNazione";
-		}
-		else
-		{
-			sql = "select id, name, population, countrycode, district from city where name like :nome and (population<:popolazione or :popolazione=0) and countrycode=:codiceNazione";
-		}
+		String sql = "select id,name,countrycode,population,district "
+				+ "from city "
+				+ "where name like :nome "
+				+ "and (population>:popolazioneMin "
+				+ "or :popolazioneMin=0) "
+				+"and (population<:popolazioneMax or :popolazioneMax=0)"
+				+ "and (CountryCode= :codiceNazione or CountryCode like :codiceNazione)";
 		BeanPropertyRowMapper<Citta> rmCity = new BeanPropertyRowMapper<Citta>(Citta.class);
 		MapSqlParameterSource parametriQuery = new MapSqlParameterSource();
 		parametriQuery.addValue("nome", city.getName());
-		parametriQuery.addValue("popolazione", city.getPopulation());
+		parametriQuery.addValue("popolazioneMin", city.getPopulationMin());
+		parametriQuery.addValue("popolazioneMax", city.getPopulationMax());
 		parametriQuery.addValue("codiceNazione", city.getCountryCode());
 		listaCitta = getNamedParameterJdbcTemplate().query(sql, parametriQuery,rmCity);
 		return listaCitta;
@@ -85,7 +84,7 @@ public class CittaDaoImpl extends NamedParameterJdbcDaoSupport implements CittaD
 		insert.addValue("regione", city.getDistrict());
 		insert.addValue("popolazione", city.getPopulation());
 		int ret = getNamedParameterJdbcTemplate().update(sql,insert);
-		
+
 		return ret;
 	}
 

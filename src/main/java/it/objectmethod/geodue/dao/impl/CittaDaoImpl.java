@@ -70,7 +70,7 @@ public class CittaDaoImpl extends NamedParameterJdbcDaoSupport implements CittaD
 	@Override
 	public Citta findCittaById(int id) {
 		Citta citta = null;
-		String sql = "select name,countrycode,id,district,population from city where id = ? ";
+		String sql = "select name,countrycode,id,district,population from city where id=? ";
 		BeanPropertyRowMapper <Citta>rmCitta = new BeanPropertyRowMapper<Citta>(Citta.class);
 		citta = getJdbcTemplate().queryForObject(sql, new Object[]{id} ,rmCitta);
 		return citta;

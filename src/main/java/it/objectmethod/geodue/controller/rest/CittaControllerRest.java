@@ -25,7 +25,7 @@ public class CittaControllerRest {
 
 	@Autowired
 	NazioniDao nazioniDao;
-	
+
 	@PostMapping("/ricerca")
 	public List<Citta> trovaCitta(@RequestBody CityFind city){
 		city.setName("%"+city.getName()+"%");
@@ -38,29 +38,29 @@ public class CittaControllerRest {
 		List<Citta> listaCitta = cittaDao.findCittaByCity(city);
 		return listaCitta;
 	}
-	
+
 	@GetMapping("/{codiceNazione}/list") //Quando ci sono poche variabili e l'utente finale non è lui a scrivere direttamente usa pathVariable
 	public List<Citta> citta(@PathVariable("codiceNazione") String codiceNazione){
 		List<Citta> listaCitta = cittaDao.findCittaByCode(codiceNazione);
 		return listaCitta;
 	}
-	
+
 	@GetMapping("/{id}/find")
 	public Citta setInformazioni(@PathVariable("id") int id){
 		Citta city = cittaDao.findCittaById(id);
 		return city;
 	}
-	
+
 	@PostMapping("/insert")
 	public Integer inserimento(@RequestBody Citta city){
 		return cittaDao.inserisciCitta(city);
 	}
-	
+
 	@PostMapping("/{id}/elimina")
 	public Integer elimina(@PathVariable("id") int id){
 		return cittaDao.eliminaCitta(id);
 	}
-	
+
 	@PostMapping("/modifica") //Utilizza chiamate più specifiche (GetMapping, PostMapping)
 	public Integer modifica(@RequestBody Citta city){
 		return cittaDao.modificaCitta(city);

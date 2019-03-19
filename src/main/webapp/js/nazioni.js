@@ -4,9 +4,12 @@
 function showContinenti(){
 
 	var xmlhttp = new XMLHttpRequest();
+	document.getElementById("formRicerca").style.display="block";
+	document.getElementById("formModifica").style.display="none";
+
 	xmlhttp.onreadystatechange = function(){
 		if(this.readyState==4 && this.status==200){
-
+			var inputHidden = document.getElementById("continente");
 			var continenti = JSON.parse(this.responseText);
 			var tagDiv = document.getElementById("content");
 			tagDiv.innerHTML="<h1>Continenti</h1>";
@@ -15,6 +18,7 @@ function showContinenti(){
 				var tagP = document.createElement("p");
 				tagP.setAttribute("name", continente);
 				tagP.addEventListener("click",function(){
+					inputHidden.setAttribute("value",this.getAttribute("name"));
 					showNazioni(this.getAttribute("name"));
 				});
 				tagP.innerHTML = continente;
@@ -29,12 +33,20 @@ function showContinenti(){
 function showNazioni(continente){
 
 	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function(){	
+	document.getElementById("formRicerca").style.display="none";
+	document.getElementById("bottoneRicerca").style.display="none";
+	xmlhttp.onreadystatechange = function(){
+
 		if(this.readyState==4 && this.status==200){
 
 			var nazioni = JSON.parse(this.responseText);
 			var tagDiv = document.getElementById("content");
+			var tastoIndietro = document.createElement("p");
+			tastoIndietro.innerHTML="Torna indietro";
+			tastoIndietro.addEventListener("click", function(){showContinenti();});
+			tastoIndietro.style.color="blue";
 			tagDiv.innerHTML="<h1>Nazioni</h1>";
+			tagDiv.appendChild(tastoIndietro);
 			for(nazione of nazioni){
 
 				var tagP= document.createElement("p");
@@ -52,3 +64,25 @@ function showNazioni(continente){
 	xmlhttp.open("GET","/api/nazioni/by-continent?continente="+continente,true);
 	xmlhttp.send();
 }
+function getAllNazioni(){
+
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function(){
+		if(this.readyState == 4 && this.status == 200){
+			var nazioni = JSON.parse(this.responseText);
+			var tagSelectRicerca = document.getElementById("listaNazioniRicerca");
+			var tagSelectModifica = document.getElementById("listaNazioniModifica");
+			for(var nazione of nazioni){
+				var tagOption = document.createElement("option");
+				tagOption.innerHTML = nazione.name;
+				tagOption.setAttribute("name",nazione.name);
+				tagOption.setAttribute("id",nazione.code);
+				tagSelectRicerca.appendChild(tagOption);
+				tagSelectModifica.appendChild(tagOption.cloneNode(true));
+			}
+		}
+	};
+	xmlhttp.open("GET","/api/nazioni/list-all",true);
+	xmlhttp.send();
+}
+

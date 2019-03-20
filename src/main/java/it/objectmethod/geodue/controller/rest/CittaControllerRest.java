@@ -14,7 +14,6 @@ import it.objectmethod.geodue.dao.CittaDao;
 import it.objectmethod.geodue.dao.NazioniDao;
 import it.objectmethod.geodue.model.Citta;
 import it.objectmethod.geodue.model.CityFind;
-import it.objectmethod.geodue.operatorvalue.OperatorValue;
 /* Quando si lavora backEnd non bisogna pensare a come il servizio verrà usato devi soltato produrlo e basta*/
 @RestController
 @RequestMapping("/api/citta") //univocità nei servizi rest
@@ -35,7 +34,7 @@ public class CittaControllerRest {
 		{
 			city.setCountryCode("%%");
 		}
-		List<Citta> listaCitta = cittaDao.findCittaByCity(city);
+		List<Citta> listaCitta = cittaDao.findCittaByCity(city); //TODO Cambiare nome del metodo
 		return listaCitta;
 	}
 

@@ -17,6 +17,7 @@ function showContinenti(){
 
 				var tagP = document.createElement("p");
 				tagP.setAttribute("name", continente);
+				tagP.setAttribute("class", "continenti");
 				tagP.addEventListener("click",function(){
 					inputHidden.setAttribute("value",this.getAttribute("name"));
 					showNazioni(this.getAttribute("name"));
@@ -34,7 +35,6 @@ function showNazioni(continente){
 
 	var xmlhttp = new XMLHttpRequest();
 	document.getElementById("formRicerca").style.display="none";
-	document.getElementById("bottoneRicerca").style.display="none";
 	xmlhttp.onreadystatechange = function(){
 
 		if(this.readyState==4 && this.status==200){
@@ -45,6 +45,7 @@ function showNazioni(continente){
 			tastoIndietro.innerHTML="Torna indietro";
 			tastoIndietro.addEventListener("click", function(){showContinenti();});
 			tastoIndietro.style.color="blue";
+			tastoIndietro.setAttribute("class", "tastoIndietro");
 			tagDiv.innerHTML="<h1>Nazioni</h1>";
 			tagDiv.appendChild(tastoIndietro);
 			for(nazione of nazioni){
@@ -52,6 +53,7 @@ function showNazioni(continente){
 				var tagP= document.createElement("p");
 				tagP.setAttribute("name",nazione.name);
 				tagP.setAttribute("id",nazione.code);
+				tagP.setAttribute("class", "nazioni");
 				tagP.addEventListener("click",function(){
 					showCitta(this.getAttribute("id"));
 				});

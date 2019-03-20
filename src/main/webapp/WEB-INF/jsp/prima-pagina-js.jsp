@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 <script type="text/javascript" src="/js/nazioni.js"></script>
 <script type="text/javascript" src="/js/citta.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/continenti.css">
 </head>
 <body>
 	<input type="hidden" id="continente">

@@ -16,7 +16,9 @@ function showCitta(codiceNazione){
 			var tastoIndietro = document.createElement("p");
 			var inputHidden = document.getElementById("continente");
 			var TastoInserisciCitta = document.createElement("p");
+			TastoInserisciCitta.setAttribute("class","tastoInserisciCitta");
 			tastoIndietro.style.color="blue";
+			tastoIndietro.setAttribute("class","tastoIndietro");
 			tastoIndietro.addEventListener("click", function(){
 				showNazioni(showNazioni(inputHidden.getAttribute("value")));
 			});
@@ -33,17 +35,19 @@ function showCitta(codiceNazione){
 				var tastoElimina = document.createElement("a");
 				var tagP = document.createElement("p");
 				tagP.setAttribute("name",citta.name);
+				tagP.setAttribute("class","citta");
 				tagP.innerHTML=citta.name+"&nbsp;&nbsp;&nbsp;&nbsp; Popolazione: "+citta.population+
 				"&nbsp;&nbsp;&nbsp;&nbsp; Regione: "+citta.district;
 				tastoElimina.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp; Elimina";
 				tastoElimina.setAttribute("id",citta.id);
+				tastoElimina.setAttribute("class","elimina");
 				tastoElimina.addEventListener("click", function(){
 
 					eliminaCitta(this.getAttribute("id"),codiceNazione);
 				});
-				tastoElimina.style.color="red";
-				tastoModifica.innerHTML = "Modifica";
+				tastoModifica.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp; Modifica";
 				tastoModifica.setAttribute("id",citta.id);
+				tastoModifica.setAttribute("class","modifica");
 				tastoModifica.addEventListener("click", function(){
 					infoCitta(this.getAttribute("id"), codiceNazione);
 				});
@@ -80,11 +84,20 @@ function ricercaCitta(){
 		if(this.readyState==4 && this.status==200){
 			var citta = JSON.parse(this.responseText);
 			var tagDiv = document.getElementById("content");
+			var tastoIndietro = document.createElement("p");
+			var inputHidden = document.getElementById("continente").value;
+	tastoIndietro.style.color="blue";
+			tastoIndietro.addEventListener("click", function(){
+				showContinenti();
+			});
+	tastoIndietro.innerHTML="Torna indietro";
+	tastoIndietro.setAttribute("class","tastoIndietro");
 			document.getElementById("formRicerca").style.display="none";
-			document.getElementById("bottoneRicerca").style.display="none";
 			tagDiv.innerHTML = "<h1>Citta trovate</h1>";
+			tagDiv.appendChild(tastoIndietro);
 			for(var city of citta){
 				var tagP = document.createElement("p");
+				tagP.setAttribute("class","citta");
 				tagP.innerHTML = city.name+"&nbsp;&nbsp;&nbsp;&nbsp; Popolazione: "+city.population;
 				tagDiv.appendChild(tagP);
 			}

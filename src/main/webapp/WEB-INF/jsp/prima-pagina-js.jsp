@@ -13,7 +13,7 @@
 	<input type="hidden" id="continente">
 	<p id="indietroContinenti" onclick="showContinenti()" class="underline">Torna indietro</p>
 	<p id="indietroNazioni" onclick="showNazioni()" class="underline">Torna indietro</p>
-
+	<p id="inserisciCitta" onclick ="infoCitta(0)" class="underline">Inserisci citta</p>
 	<div id="content">
 	</div>
 	<div id="formRicerca" class="creaRettangolo">

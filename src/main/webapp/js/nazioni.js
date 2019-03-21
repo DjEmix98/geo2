@@ -8,6 +8,7 @@ function showContinenti(){
 	document.getElementById("formModifica").style.display="none";
 	document.getElementById("indietroContinenti").style.display="none";
 	document.getElementById("indietroNazioni").style.display="none";
+	document.getElementById("inserisciCitta").style.display="none";
 	xmlhttp.onreadystatechange = function(){
 		if(this.readyState==4 && this.status==200){
 			var inputHidden = document.getElementById("continente");
@@ -39,6 +40,7 @@ function showNazioni(){
 	document.getElementById("formRicerca").style.display="none";
 	document.getElementById("indietroContinenti").style.display="block";
 	document.getElementById("indietroNazioni").style.display="none";
+	document.getElementById("inserisciCitta").style.display="none";
 	xmlhttp.onreadystatechange = function(){
 
 		if(this.readyState==4 && this.status==200){

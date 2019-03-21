@@ -9,6 +9,7 @@ function showCitta(){
 	document.getElementById("formModifica").style.display="none";
 	document.getElementById("indietroContinenti").style.display="none";
 	document.getElementById("indietroNazioni").style.display="block";
+	document.getElementById("inserisciCitta").style.display="block";
 	xmlhttp.onreadystatechange = function(){
 		if(this.readyState==4 && this.status==200){
 
@@ -61,6 +62,7 @@ function ricercaCitta(){
 	var popolazioneMin = document.getElementById("popolazioneMin").value;
 	var tagOption = document.getElementsByTagName("option");
 	var ricercaCittaObj = new Object();
+	document.getElementById("indietroContinenti").style.display="block";
 	ricercaCittaObj.name = campoCity.value;
 	ricercaCittaObj.populationMax = popolazioneMax;
 	ricercaCittaObj.populationMin = popolazioneMin;
@@ -118,8 +120,8 @@ function infoCitta(id){
 	var tagOption = tagSelect.getElementsByTagName("option");
 	var bottoneModifica = document.getElementById("bottoneModifica");
 	var bottoneInserisci = document.getElementById("bottoneInserisci");
-	
 	formModifica.style.display="block";
+	document.getElementById("inserisciCitta").style.display="none";
 	document.getElementById("formRicerca").style.display="none";
 	document.getElementById("indietroNazioni").style.display="none";
 	tagDiv.innerHTML="";

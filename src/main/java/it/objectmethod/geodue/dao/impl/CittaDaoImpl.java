@@ -31,7 +31,7 @@ public class CittaDaoImpl extends NamedParameterJdbcDaoSupport implements CittaD
 		return listaCitta;
 	}
 	@Override
-	public List<Citta> findCittaByCity(CityFind city){
+	public List<Citta> findCitta(CityFind city){
 		List<Citta> listaCitta = null;
 		String sql = "select id,name,countrycode,population,district "
 				+ "from city "

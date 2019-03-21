@@ -6,21 +6,22 @@ function showContinenti(){
 	var xmlhttp = new XMLHttpRequest();
 	document.getElementById("formRicerca").style.display="block";
 	document.getElementById("formModifica").style.display="none";
-
+	document.getElementById("indietroContinenti").style.display="none";
+	document.getElementById("indietroNazioni").style.display="none";
 	xmlhttp.onreadystatechange = function(){
 		if(this.readyState==4 && this.status==200){
 			var inputHidden = document.getElementById("continente");
 			var continenti = JSON.parse(this.responseText);
 			var tagDiv = document.getElementById("content");
-			tagDiv.innerHTML="<h1>Continenti</h1>";
+			tagDiv.innerHTML="<h1 class='intestazioni'>Continenti</h1>";
 			for(var continente of continenti){
 
 				var tagP = document.createElement("p");
 				tagP.setAttribute("name", continente);
-				tagP.setAttribute("class", "continenti");
+				tagP.className="bottoni verde";
 				tagP.addEventListener("click",function(){
 					inputHidden.setAttribute("value",this.getAttribute("name"));
-					showNazioni(this.getAttribute("name"));
+					showNazioni();
 				});
 				tagP.innerHTML = continente;
 				tagDiv.appendChild(tagP);
@@ -31,31 +32,30 @@ function showContinenti(){
 	xmlhttp.send();
 }
 
-function showNazioni(continente){
+function showNazioni(){
 
 	var xmlhttp = new XMLHttpRequest();
+	var continente = document.getElementById("continente").value;
 	document.getElementById("formRicerca").style.display="none";
+	document.getElementById("indietroContinenti").style.display="block";
+	document.getElementById("indietroNazioni").style.display="none";
 	xmlhttp.onreadystatechange = function(){
 
 		if(this.readyState==4 && this.status==200){
 
 			var nazioni = JSON.parse(this.responseText);
 			var tagDiv = document.getElementById("content");
-			var tastoIndietro = document.createElement("p");
-			tastoIndietro.innerHTML="Torna indietro";
-			tastoIndietro.addEventListener("click", function(){showContinenti();});
-			tastoIndietro.style.color="blue";
-			tastoIndietro.setAttribute("class", "tastoIndietro");
-			tagDiv.innerHTML="<h1>Nazioni</h1>";
-			tagDiv.appendChild(tastoIndietro);
+			var codiceNazione = document.getElementById("codiceNazioneHidden");
+			tagDiv.innerHTML="<h1 class='intestazioni'>Nazioni</h1>";
 			for(nazione of nazioni){
 
 				var tagP= document.createElement("p");
 				tagP.setAttribute("name",nazione.name);
 				tagP.setAttribute("id",nazione.code);
-				tagP.setAttribute("class", "nazioni");
+				tagP.className="bottoni giallo";
 				tagP.addEventListener("click",function(){
-					showCitta(this.getAttribute("id"));
+					codiceNazione.value = this.getAttribute("id");
+					showCitta();
 				});
 
 				tagP.innerHTML=nazione.name+"&nbsp;&nbsp;&nbsp;&nbsp;Popolazione: "+nazione.population;

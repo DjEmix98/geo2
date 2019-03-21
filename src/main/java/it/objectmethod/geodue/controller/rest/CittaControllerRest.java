@@ -34,7 +34,7 @@ public class CittaControllerRest {
 		{
 			city.setCountryCode("%%");
 		}
-		List<Citta> listaCitta = cittaDao.findCittaByCity(city); //TODO Cambiare nome del metodo
+		List<Citta> listaCitta = cittaDao.findCitta(city); //TODO Cambiare nome del metodo
 		return listaCitta;
 	}
 

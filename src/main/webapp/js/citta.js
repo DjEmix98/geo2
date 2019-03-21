@@ -1,53 +1,46 @@
 /**
  * aaaa
  */
-function showCitta(codiceNazione){
+function showCitta(){
 
 	var xmlhttp = new XMLHttpRequest();
+	var codiceNazione = document.getElementById("codiceNazioneHidden").value;
 	document.getElementById("formRicerca").style.display="none";
 	document.getElementById("formModifica").style.display="none";
-	document.getElementById("content").style.display="block";
-	document.getElementById("codiceNazione").value = codiceNazione;
+	document.getElementById("indietroContinenti").style.display="none";
+	document.getElementById("indietroNazioni").style.display="block";
 	xmlhttp.onreadystatechange = function(){
 		if(this.readyState==4 && this.status==200){
 
 			var city = JSON.parse(this.responseText);
 			var tagDiv = document.getElementById("content");
-			var tastoIndietro = document.createElement("p");
 			var inputHidden = document.getElementById("continente");
 			var TastoInserisciCitta = document.createElement("p");
-			TastoInserisciCitta.setAttribute("class","tastoInserisciCitta");
-			tastoIndietro.style.color="blue";
-			tastoIndietro.setAttribute("class","tastoIndietro");
-			tastoIndietro.addEventListener("click", function(){
-				showNazioni(showNazioni(inputHidden.getAttribute("value")));
-			});
+			TastoInserisciCitta.setAttribute("class","underline");
 			TastoInserisciCitta.addEventListener("click", function(){
 				infoCitta (0);
 			})
-			tastoIndietro.innerHTML="Torna indietro";
 			TastoInserisciCitta.innerHTML="Inserisci citta";
-			tagDiv.innerHTML = "<h1>Citta</h1>";
-			tagDiv.appendChild(tastoIndietro);
+			tagDiv.innerHTML = "<h1 class='intestazioni'>Citta</h1>";
 			tagDiv.appendChild(TastoInserisciCitta);
 			for(citta of city){
 				var tastoModifica = document.createElement("a");
 				var tastoElimina = document.createElement("a");
 				var tagP = document.createElement("p");
 				tagP.setAttribute("name",citta.name);
-				tagP.setAttribute("class","citta");
+				tagP.className="bottoni viola";
 				tagP.innerHTML=citta.name+"&nbsp;&nbsp;&nbsp;&nbsp; Popolazione: "+citta.population+
 				"&nbsp;&nbsp;&nbsp;&nbsp; Regione: "+citta.district;
 				tastoElimina.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp; Elimina";
 				tastoElimina.setAttribute("id",citta.id);
-				tastoElimina.setAttribute("class","elimina");
+				tastoElimina.className = "rosso";
 				tastoElimina.addEventListener("click", function(){
 
 					eliminaCitta(this.getAttribute("id"),codiceNazione);
 				});
 				tastoModifica.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp; Modifica";
 				tastoModifica.setAttribute("id",citta.id);
-				tastoModifica.setAttribute("class","modifica");
+				tastoModifica.setAttribute("class","bianco");
 				tastoModifica.addEventListener("click", function(){
 					infoCitta(this.getAttribute("id"), codiceNazione);
 				});
@@ -84,17 +77,9 @@ function ricercaCitta(){
 		if(this.readyState==4 && this.status==200){
 			var citta = JSON.parse(this.responseText);
 			var tagDiv = document.getElementById("content");
-			var tastoIndietro = document.createElement("p");
-			var inputHidden = document.getElementById("continente").value;
-			tastoIndietro.style.color="blue";
-			tastoIndietro.addEventListener("click", function(){
-				showContinenti();
-			});
-			tastoIndietro.innerHTML="Torna indietro";
-			tastoIndietro.setAttribute("class","tastoIndietro");
+			document.getElementById("content").value="";
 			document.getElementById("formRicerca").style.display="none";
-			tagDiv.innerHTML = "<h1>Citta trovate</h1>";
-			tagDiv.appendChild(tastoIndietro);
+			tagDiv.innerHTML = "<h1 class='intestazioni'>Citta trovate</h1>";
 			for(var city of citta){
 				var tagP = document.createElement("p");
 				tagP.setAttribute("class","citta");
@@ -125,9 +110,7 @@ function eliminaCitta(id, codiceNazione){
 
 function infoCitta(id){
 	var formModifica = document.getElementById("formModifica");
-	formModifica.style.display="block";
-	document.getElementById("formRicerca").style.display="none";
-	document.getElementById("content").style.display="none";
+	var tagDiv=document.getElementById("content");
 	var campoRegione = document.getElementById("textRegione");
 	var campoCitta = document.getElementById("textCitta");
 	var campoPopolazione = document.getElementById("textPopolazione");
@@ -135,11 +118,11 @@ function infoCitta(id){
 	var tagOption = tagSelect.getElementsByTagName("option");
 	var bottoneModifica = document.getElementById("bottoneModifica");
 	var bottoneInserisci = document.getElementById("bottoneInserisci");
-	var bottoneIndietro = document.getElementById("indietroModifica");
-	var inputHiddenCodiceNazione = document.getElementById("codiceNazione");
-	bottoneIndietro.addEventListener("click", function(){
-		showCitta(inputHiddenCodiceNazione);
-	});
+	
+	formModifica.style.display="block";
+	document.getElementById("formRicerca").style.display="none";
+	document.getElementById("indietroNazioni").style.display="none";
+	tagDiv.innerHTML="";
 	if(id!=0){
 
 		var xmlhttp = new XMLHttpRequest();

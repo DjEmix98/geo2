@@ -1,253 +1,188 @@
 /**
  * aaaa
  */
-function showCitta(){
+function showCitta() {
 
-	var xmlhttp = new XMLHttpRequest();
-	var codiceNazione = document.getElementById("codiceNazioneHidden").value;
-	document.getElementById("formRicerca").style.display="none";
-	document.getElementById("formModifica").style.display="none";
-	document.getElementById("indietroContinenti").style.display="none";
-	document.getElementById("indietroNazioni").style.display="block";
-	document.getElementById("inserisciCitta").style.display="block";
-	xmlhttp.onreadystatechange = function(){
-		if(this.readyState==4 && this.status==200){
+	var codiceNazione = $("#codiceNazioneHidden").val();
+	$("#formRicerca").hide();
+	$("#formModifica").hide();
+	$("#indietroContinenti").hide();
+	$("#indietroNazioni").show();
+	$("#inserisciCitta").show();
 
-			var city = JSON.parse(this.responseText);
-			var tagDiv = document.getElementById("content");
-			var inputHidden = document.getElementById("continente");
-			var TastoInserisciCitta = document.createElement("p");
-			TastoInserisciCitta.setAttribute("class","underline");
-			TastoInserisciCitta.addEventListener("click", function(){
-				infoCitta (0);
-			})
-			TastoInserisciCitta.innerHTML="Inserisci citta";
-			tagDiv.innerHTML = "<h1 class='intestazioni'>Citta</h1>";
-			tagDiv.appendChild(TastoInserisciCitta);
-			for(citta of city){
-				var tastoModifica = document.createElement("a");
-				var tastoElimina = document.createElement("a");
-				var tagP = document.createElement("p");
-				tagP.setAttribute("name",citta.name);
-				tagP.className="bottoni viola";
-				tagP.innerHTML=citta.name+"&nbsp;&nbsp;&nbsp;&nbsp; Popolazione: "+citta.population+
-				"&nbsp;&nbsp;&nbsp;&nbsp; Regione: "+citta.district;
-				tastoElimina.innerHTML="&nbsp;&nbsp;&nbsp;&nbsp; Elimina";
-				tastoElimina.setAttribute("id",citta.id);
-				tastoElimina.className = "rosso";
-				tastoElimina.addEventListener("click", function(){
+	$.get("/api/citta/" + codiceNazione + "/list", function (city, status) {
 
-					eliminaCitta(this.getAttribute("id"),codiceNazione);
-				});
-				tastoModifica.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp; Modifica";
-				tastoModifica.setAttribute("id",citta.id);
-				tastoModifica.setAttribute("class","bianco");
-				tastoModifica.addEventListener("click", function(){
-					infoCitta(this.getAttribute("id"), codiceNazione);
-				});
-				tagP.appendChild(tastoModifica);
-				tagP.appendChild(tastoElimina);
-				tagDiv.appendChild(tagP);
-			}
+		var tagDiv = $("#content");
+		tagDiv.html("<h1 class='intestazioni'>Citta</h1>");
+		for (citta of city) {
+
+			tagDiv.append("<p class= 'bottoni viola'>" + citta.name +
+				"<a id='modifica" + citta.id + "'class='bianco' name='" + citta.id + "'>&nbsp;&nbsp;Modifica</a>"
+				+ "<a id='elimina" + citta.id + "'class='rosso'name='" + citta.id + "'>&nbsp;&nbsp;Elimina</a>" + "</p>");
+			$("#elimina" + citta.id).click(function () {
+				eliminaCitta($(this).attr("name"));
+			});
+			$("#modifica" + citta.id).click(function () {
+				infoCitta($(this).attr("name"));
+			});
 		}
-	};
-	xmlhttp.open("GET","/api/citta/"+codiceNazione+"/list",true);
-	xmlhttp.send();
+	});
 }
 
-function ricercaCitta(){
+function ricercaCitta() {
 	var xmlhttp = new XMLHttpRequest();
-	var campoCity = document.getElementById("textRicercaCitta");
-	var popolazioneMax = document.getElementById("popolazioneMax").value;
-	var popolazioneMin = document.getElementById("popolazioneMin").value;
-	var tagOption = document.getElementsByTagName("option");
+	var campoCity = $("#textRicercaCitta").val();
+	var popolazioneMax = $("#popolazioneMax").val();
+	var popolazioneMin = $("#popolazioneMin").val();
+
 	var ricercaCittaObj = new Object();
-	document.getElementById("indietroContinenti").style.display="block";
-	ricercaCittaObj.name = campoCity.value;
+	document.getElementById("indietroContinenti").style.display = "block";
+	ricercaCittaObj.name = campoCity;
 	ricercaCittaObj.populationMax = popolazioneMax;
 	ricercaCittaObj.populationMin = popolazioneMin;
-	for(var i=0;i<tagOption.length;i++){
+	ricercaCittaObj.countryCode = $("#listaNazioniRicerca option:selected").attr("id");
 
-		if(tagOption[i].selected==true){
-
-			ricercaCittaObj.countryCode=tagOption[i].getAttribute("id");
-			break;
-		}
-	}
 	var jsonCitta = JSON.stringify(ricercaCittaObj);
-	xmlhttp.onreadystatechange = function(){
-		if(this.readyState==4 && this.status==200){
-			var citta = JSON.parse(this.responseText);
-			var tagDiv = document.getElementById("content");
-			document.getElementById("content").value="";
-			document.getElementById("formRicerca").style.display="none";
-			tagDiv.innerHTML = "<h1 class='intestazioni'>Citta trovate</h1>";
-			for(var city of citta){
-				var tagP = document.createElement("p");
-				tagP.setAttribute("class","citta");
-				tagP.innerHTML = city.name+"&nbsp;&nbsp;&nbsp;&nbsp; Popolazione: "+city.population;
-				tagDiv.appendChild(tagP);
+	$.ajax({
+		url: "/api/citta/ricerca",
+		type: "POST",
+		data: jsonCitta,
+		contentType: "application/json",
+		dataType: "json",
+		success: function (citta) {
+			//xmlhttp.onreadystatechange = function(){
+			//	if(this.readyState==4 && this.status==200){
+			//	var citta = JSON.parse(this.responseText);
+			console.log("data: " + citta);
+			var tagDiv = $("#content");
+			$("#formRicerca").hide();
+			tagDiv.html("<h1 class='intestazioni'>Citta trovate</h1>");
+			for (var city of citta) {
+				tagDiv.append("<p class= 'bottoni verde' >" + city.name + " Popolazione: " + city.population + "</p>");
 			}
-
 		}
-	};
-	xmlhttp.open("POST","/api/citta/ricerca");
+	});
+	//}
+	//};
+	/*xmlhttp.open("POST","/api/citta/ricerca");
 	xmlhttp.setRequestHeader("Content-Type", "application/json");
-	xmlhttp.send(jsonCitta);
+	xmlhttp.send(jsonCitta);*/
 }
 
-function eliminaCitta(id, codiceNazione){
+function eliminaCitta(id, codiceNazione) {
 
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function(){
-
-		if(this.readyState==4 && this.status==200){
-
-			showCitta(codiceNazione);
-		}
-	}
-	xmlhttp.open("POST","/api/citta/"+id+"/elimina",true);
-	xmlhttp.send();
+	$.post("/api/citta/" + id + "/elimina", function () {
+		showCitta(codiceNazione);
+	});
 }
 
-function infoCitta(id){
-	var formModifica = document.getElementById("formModifica");
-	var tagDiv=document.getElementById("content");
-	var campoRegione = document.getElementById("textRegione");
-	var campoCitta = document.getElementById("textCitta");
-	var campoPopolazione = document.getElementById("textPopolazione");
-	var tagSelect = document.getElementById("listaNazioniModifica");
-	var tagOption = tagSelect.getElementsByTagName("option");
-	var bottoneModifica = document.getElementById("bottoneModifica");
-	var bottoneInserisci = document.getElementById("bottoneInserisci");
-	formModifica.style.display="block";
-	document.getElementById("inserisciCitta").style.display="none";
-	document.getElementById("formRicerca").style.display="none";
-	document.getElementById("indietroNazioni").style.display="none";
-	tagDiv.innerHTML="";
-	if(id!=0){
+function infoCitta(id) {
 
-		var xmlhttp = new XMLHttpRequest();
-		var inputHiddenId = document.getElementById("idCitta");
-		xmlhttp.onreadystatechange = function(){
+	var tagDiv = $("#content");
+	var campoRegione = $("#textRegione");
+	var campoCitta = $("#textCitta")
+	var campoPopolazione = $("#textPopolazione");
+	var bottoneModifica = $("#bottoneModifica");
+	var bottoneInserisci = $("#bottoneInserisci");
+	$("#formModifica").show();
 
-			if(this.readyState==4 && this.status == 200){
+	$("#inserisciCitta").hide();
+	$("#formRicerca").hide();
+	$("#indietroNazioni").hide();
+	tagDiv.html("");
+	if (id != 0) {
 
-				var jsonCity = JSON.parse(this.responseText);
-				bottoneModifica.style.display="block";
-				bottoneInserisci.style.display = "none";
-				campoRegione.value = jsonCity.district;
-				campoCitta.value = jsonCity.name;
-				campoPopolazione.value = jsonCity.population;
-				for(var i=0;i<tagOption.length;i++){
-					if(tagOption[i].getAttribute("id")==jsonCity.countryCode){
-						tagOption[i].selected=true;
-						break;
-					}
-				}
-				inputHiddenId.value = id;
-			}
-		};
+		var inputHiddenId = $("#idCitta");
 
-		xmlhttp.open("GET","/api/citta/"+id+"/find",true);
-		xmlhttp.send();
+		$.get("/api/citta/" + id + "/find", function (jsonCity) {
+			bottoneModifica.show();
+			bottoneInserisci.hide();
+			campoRegione.val(jsonCity.district);
+			campoCitta.val(jsonCity.name);
+			campoPopolazione.val(jsonCity.population);
+			$("#listaNazioniModifica option[id=" + jsonCity.countryCode + "]").attr("selected", "selected");
+			inputHiddenId.val(id);
+		});
 	}
-	else{
+	else {
 
-		bottoneModifica.style.display="none";
-		bottoneInserisci.style.display = "block";
-		campoPopolazione.value="";
-		campoCitta.value="";
-		campoRegione.value="";
-		tagOption[0].selected=true;
+		bottoneModifica.hide();
+		bottoneInserisci.show();
+		campoPopolazione.val("");
+		campoCitta.val("");
+		campoRegione.val("");
+		$("#listaNazioniModifica option[id='ABW']").attr("selected", "selected");
 
 	}
 
 }
 
-function modificaCitta(){
+function modificaCitta() {
 
-	var xmlhttp = new XMLHttpRequest();
-	var bottoneModifica = document.getElementById("bottoneModifica");
-	var campoCitta = document.getElementById("textCitta");
-	var campoPopolazione = document.getElementById("textPopolazione");
-	var campoRegione = document.getElementById("textRegione");
-	var campoNazione = document.getElementById("listaNazioniModifica");
-	var tagSelect = document.getElementById("listaNazioniModifica");
-	var tagOption = tagSelect.getElementsByTagName("option");
-	var inputHiddenId = document.getElementById("idCitta").value;
+	var campoCitta = $("#textCitta").val();
+	var campoPopolazione = $("#textPopolazione").val();
+	var campoRegione = $("#textRegione").val();
+	var inputHiddenId = $("#idCitta").val();
 	var jsonCitta = new Object();
-	jsonCitta.population = campoPopolazione.value;
-	jsonCitta.district = campoRegione.value;
-	jsonCitta.name = campoCitta.value;
-	for(var i=0;i<tagOption.length;i++){
-
-		if(tagOption[i].selected==true){
-			jsonCitta.countryCode =	tagOption[i].getAttribute("id");
-			break;
-		}
-	}
-	jsonCitta.id = inputHiddenId;		
+	jsonCitta.population = campoPopolazione;
+	jsonCitta.district = campoRegione;
+	jsonCitta.name = campoCitta;
+	jsonCitta.countryCode = $("#listaNazioniModifica option:selected").attr("id");
+	jsonCitta.id = inputHiddenId;
+	$("#codiceNazioneHidden").val(jsonCitta.countryCode);
 	var jsonDaInserire = JSON.stringify(jsonCitta);
-	xmlhttp.onreadystatechange = function(){
 
-		if(this.readyState==4 && this.status == 200){
-
-			var successModify = JSON.parse(this.responseText);
-			if(successModify!=0){
+	$.ajax({
+		url: "/api/citta/modifica",
+		type: "POST",
+		data: jsonDaInserire,
+		contentType: "application/json",
+		dataType: "json",
+		success: function (successModify) {
+			if (successModify != 0) {
 
 				alert("modificato con successo!")
 			}
-			else{
+			else {
 				alert("Errore, modifica non riuscita");
 			}
-			showCitta(jsonCitta.countryCode);
+			showCitta();
 		}
-	};
+	});
 
-	xmlhttp.open("POST","/api/citta/modifica",true);
-	xmlhttp.setRequestHeader("Content-Type", "application/json");
-	xmlhttp.send(jsonDaInserire);
 
 }
 
-function inserisciCitta(){
+function inserisciCitta() {
 
-	var xmlhttp = new XMLHttpRequest();
+
 	var jsonCitta = new Object();
-	var campoCitta = document.getElementById("textCitta");
-	var campoPopolazione = document.getElementById("textPopolazione");
-	var campoRegione = document.getElementById("textRegione");
-	var campoNazione = document.getElementById("listaNazioniModifica");
-	var tagSelect = document.getElementById("listaNazioniModifica");
-	var tagOption = tagSelect.getElementsByTagName("option");
-	jsonCitta.population = campoPopolazione.value;
-	jsonCitta.district = campoRegione.value;
-	jsonCitta.name = campoCitta.value;
-	for(var i=0;i<tagOption.length;i++){
+	var campoCitta = $("#textCitta").val();
+	var campoPopolazione = $("#textPopolazione").val()
+	var campoRegione = $("#textRegione").val();
+	jsonCitta.population = campoPopolazione;
+	jsonCitta.district = campoRegione;
+	jsonCitta.name = campoCitta;
+	jsonCitta.countryCode = $("#listaNazioniModifica option:selected").attr("id");
+	$("#codiceNazioneHidden").val(jsonCitta.countryCode);
 
-		if(tagOption[i].selected==true){
-			jsonCitta.countryCode =	tagOption[i].getAttribute("id");
-			break;
-		}
-	}
 	var jsonDaInserire = JSON.stringify(jsonCitta);
-	xmlhttp.onreadystatechange = function(){
 
-		if(this.readyState==4 && this.status == 200){
-
-			var successModify = JSON.parse(this.responseText);
-			if(successModify!=0){
+	$.ajax({
+		url: "/api/citta/insert",
+		type: "POST",
+		data: jsonDaInserire,
+		contentType: "application/json",
+		dataType: "json",
+		success: function (successModify) {
+			if (successModify != 0) {
 
 				alert("Inserito con successo!")
 			}
-			else{
+			else {
 				alert("Errore, inserimento non riuscito");
 			}
-			showCitta(jsonCitta.countryCode);
+			showCitta();
 		}
-	}
-	xmlhttp.open("POST","/api/citta/insert",true);
-	xmlhttp.setRequestHeader("Content-Type", "application/json");
-	xmlhttp.send(jsonDaInserire);
+	});
 }

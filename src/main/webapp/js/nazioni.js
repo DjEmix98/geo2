@@ -1,92 +1,72 @@
 /**
  * 
  */
-function showContinenti(){
+function showContinenti() {
 
-	var xmlhttp = new XMLHttpRequest();
-	document.getElementById("formRicerca").style.display="block";
-	document.getElementById("formModifica").style.display="none";
-	document.getElementById("indietroContinenti").style.display="none";
-	document.getElementById("indietroNazioni").style.display="none";
-	document.getElementById("inserisciCitta").style.display="none";
-	xmlhttp.onreadystatechange = function(){
-		if(this.readyState==4 && this.status==200){
-			var inputHidden = document.getElementById("continente");
-			var continenti = JSON.parse(this.responseText);
-			var tagDiv = document.getElementById("content");
-			tagDiv.innerHTML="<h1 class='intestazioni'>Continenti</h1>";
-			for(var continente of continenti){
-
-				var tagP = document.createElement("p");
-				tagP.setAttribute("name", continente);
-				tagP.className="bottoni verde";
-				tagP.addEventListener("click",function(){
-					inputHidden.setAttribute("value",this.getAttribute("name"));
-					showNazioni();
-				});
-				tagP.innerHTML = continente;
-				tagDiv.appendChild(tagP);
+	$("#formRicerca").show();
+	$("#formModifica").hide();
+	$("#indietroContinenti").hide();
+	$("#indietroNazioni").hide();
+	$("#inserisciCitta").hide();
+	$.get("/api/nazioni/continenti", function (continenti, status) {
+		var inputHidden = $("#continente");//document.getElementById("continente");
+		var tagDiv = $("#content");
+		tagDiv.html("<h1 class='intestazioni'>Continenti</h1>");
+		for (var continente of continenti) {
+			var idContinente = continente.split(" ");
+			if (idContinente.length > 1) {
+				idContinente = continente.replace(continente, idContinente[0] + idContinente[1]);
 			}
+			console.log("continente: " + continente);
+			tagDiv.append("<p id='" + idContinente + "' name = '" + continente + "' class= 'bottoni verde'>" + continente + "</p>");
+			$("#" + idContinente).click(function () {
+
+				console.log("continente: " + $(this).attr("name"));
+				inputHidden.val($(this).attr("name"));
+				showNazioni();
+			});
+
 		}
-	};
-	xmlhttp.open("GET","/api/nazioni/continenti",true);
-	xmlhttp.send();
+	});
 }
 
-function showNazioni(){
+function showNazioni() {
 
-	var xmlhttp = new XMLHttpRequest();
-	var continente = document.getElementById("continente").value;
-	document.getElementById("formRicerca").style.display="none";
-	document.getElementById("indietroContinenti").style.display="block";
-	document.getElementById("indietroNazioni").style.display="none";
-	document.getElementById("inserisciCitta").style.display="none";
-	xmlhttp.onreadystatechange = function(){
+	var continente = $("#continente").val();
+	$("#formRicerca").hide();
+	$("#indietroContinenti").show();
+	$("#indietroNazioni").hide();
+	$("#inserisciCitta").hide();
 
-		if(this.readyState==4 && this.status==200){
+	$.get("/api/nazioni/by-continent?continente=" + continente, function (nazioni, status) {
 
-			var nazioni = JSON.parse(this.responseText);
-			var tagDiv = document.getElementById("content");
-			var codiceNazione = document.getElementById("codiceNazioneHidden");
-			tagDiv.innerHTML="<h1 class='intestazioni'>Nazioni</h1>";
-			for(nazione of nazioni){
+		var tagDiv = $("#content")
+		var codiceNazione = $("#codiceNazioneHidden");
+		tagDiv.html("<h1 class='intestazioni'>Nazioni</h1>");
+		var contatoreId = 0;
+		for (nazione of nazioni) {
 
-				var tagP= document.createElement("p");
-				tagP.setAttribute("name",nazione.name);
-				tagP.setAttribute("id",nazione.code);
-				tagP.className="bottoni giallo";
-				tagP.addEventListener("click",function(){
-					codiceNazione.value = this.getAttribute("id");
-					showCitta();
-				});
-
-				tagP.innerHTML=nazione.name+"&nbsp;&nbsp;&nbsp;&nbsp;Popolazione: "+nazione.population;
-				tagDiv.appendChild(tagP);
-			}
+			tagDiv.append("<p id=" + nazione.code + " class= 'bottoni giallo'>" + nazione.name +
+				"Popolazione: " + nazione.population + "</p>");
+			$("#" + nazione.code).click(function () {
+				codiceNazione.val($(this).attr("id"));
+				showCitta();
+			});
 		}
-	};
-	xmlhttp.open("GET","/api/nazioni/by-continent?continente="+continente,true);
-	xmlhttp.send();
+	});
 }
-function getAllNazioni(){
+function getAllNazioni() {
 
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function(){
-		if(this.readyState == 4 && this.status == 200){
-			var nazioni = JSON.parse(this.responseText);
-			var tagSelectRicerca = document.getElementById("listaNazioniRicerca");
-			var tagSelectModifica = document.getElementById("listaNazioniModifica");
-			for(var nazione of nazioni){
-				var tagOption = document.createElement("option");
-				tagOption.innerHTML = nazione.name;
-				tagOption.setAttribute("name",nazione.name);
-				tagOption.setAttribute("id",nazione.code);
-				tagSelectRicerca.appendChild(tagOption);
-				tagSelectModifica.appendChild(tagOption.cloneNode(true));
-			}
+	$.get("/api/nazioni/list-all", function (nazioni, status) {
+
+		var tagSelectRicerca = $("#listaNazioniRicerca");
+		var tagSelectModifica = $("#listaNazioniModifica");
+		for (var nazione of nazioni) {
+			tagSelectModifica.append("<option name='" + nazione.name + "' id='" + nazione.code + "'>" +
+				nazione.name + "</option>");
+			tagSelectRicerca.append("<option name='" + nazione.name + "' id='" + nazione.code + "'>" +
+				nazione.name + "</option>");
 		}
-	};
-	xmlhttp.open("GET","/api/nazioni/list-all",true);
-	xmlhttp.send();
+	});
 }
 

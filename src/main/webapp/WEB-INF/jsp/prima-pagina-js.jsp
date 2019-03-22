@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 <script type="text/javascript" src="/js/nazioni.js"></script>
 <script type="text/javascript" src="/js/citta.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
@@ -16,7 +17,7 @@
 	<p id="inserisciCitta" onclick ="infoCitta(0)" class="underline">Inserisci citta</p>
 	<div id="content">
 	</div>
-	<div id="formRicerca" class="creaRettangolo">
+	<div id="formRicerca" class="bordo-verde">
 		<form>
 			<p>Da qui inserisci la tua citta:</p>
 			<select id="listaNazioniRicerca">
@@ -24,7 +25,7 @@
 			Inserisci popolazione max: <input type="text" id="popolazioneMax"><br>
 			Inserisci popolazione min: <input type="text" id="popolazioneMin"><br>
 		</form>
-		<button onclick="ricercaCitta()" id="bottoneRicerca" class="neroAzzurro">CercaCitta!</button>
+		<button onclick="ricercaCitta()" id="bottoneRicerca" class="nero-azzurro">CercaCitta!</button>
 	
 	</div>
 

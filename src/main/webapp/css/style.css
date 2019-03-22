@@ -7,7 +7,6 @@
     text-align: center;
     width: 10%;
     margin-left: 45%;
-    
 }
 .verde{
 
@@ -20,7 +19,7 @@
     text-decoration-color: none;
 }
 
-.neroAzzurro {
+.nero-azzurro {
     font-size: smaller;
     font-style: italic;
      font-family: "Times New Roman"; 
@@ -30,7 +29,7 @@
     
 }
 
-.creaRettangolo{
+.bordo-verde{
     text-align: center;
     border:dotted green;
 }
@@ -58,6 +57,7 @@ body{
 
     background-color: red;
     cursor: pointer;
+
 }
 
 .bianco{
@@ -71,4 +71,5 @@ body{
     cursor: pointer;
     text-decoration: underline;
 }
+
   

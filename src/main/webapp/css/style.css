@@ -13,12 +13,6 @@
     background-color: #4CAF50;    
 }
 
-.intestazioni{
-    text-align: center;
-    color: brown;
-    text-decoration-color: none;
-}
-
 .nero-azzurro {
     font-size: smaller;
     font-style: italic;
@@ -29,9 +23,9 @@
     
 }
 
-.bordo-verde{
-    text-align: center;
-    border:dotted green;
+.verde{
+ 
+    color:green;
 }
 
 body{
@@ -41,22 +35,16 @@ body{
 }
 
 .giallo{
-    display: inline-block;
-    background-color: yellowgreen;
-    cursor: pointer;
-    text-align: center;
-    margin-left: 45%;
+    color: yellowgreen;
 }
 
 .viola{
 
-    background-color: blueviolet;
-    text-align: center;
+    color: blueviolet;
 }
 .rosso{
 
     background-color: red;
-    cursor: pointer;
 
 }
 
@@ -72,4 +60,15 @@ body{
     text-decoration: underline;
 }
 
+.blu{
+
+    color: blue;
+}
+
+.background-verde{
+
+    background-color:green;
+}
+
+  
   

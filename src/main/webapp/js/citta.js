@@ -13,12 +13,12 @@ function showCitta() {
 	$.get("/api/citta/" + codiceNazione + "/list", function (city, status) {
 
 		var tagDiv = $("#content");
-		tagDiv.html("<h1 class='intestazioni'>Citta</h1>");
+		tagDiv.html("<h1 class='giallo'>Citta</h1>");
 		for (citta of city) {
 
-			tagDiv.append("<p class= 'bottoni viola'>" + citta.name +
-				"<a id='modifica" + citta.id + "'class='bianco' name='" + citta.id + "'>&nbsp;&nbsp;Modifica</a>"
-				+ "<a id='elimina" + citta.id + "'class='rosso'name='" + citta.id + "'>&nbsp;&nbsp;Elimina</a>" + "</p>");
+			tagDiv.append("<p class= 'btn btn-success btn-sm col-7'>" + citta.name +
+				"<a id='modifica" + citta.id + "'class='btn btn-sm btn-warning col' name='" + citta.id + "'>&nbsp;&nbsp;Modifica</a>"
+				+ "<a id='elimina" + citta.id + "'class='btn btn-sm btn-danger col'name='" + citta.id + "'>&nbsp;&nbsp;Elimina</a>" + "</p>");
 			$("#elimina" + citta.id).click(function () {
 				eliminaCitta($(this).attr("name"));
 			});
@@ -56,9 +56,9 @@ function ricercaCitta() {
 			console.log("data: " + citta);
 			var tagDiv = $("#content");
 			$("#formRicerca").hide();
-			tagDiv.html("<h1 class='intestazioni'>Citta trovate</h1>");
+			tagDiv.html("<h1 class='blu'>Citta trovate</h1>");
 			for (var city of citta) {
-				tagDiv.append("<p class= 'bottoni verde' >" + city.name + " Popolazione: " + city.population + "</p>");
+				tagDiv.append("<p class= 'btn btn-success' >" + city.name + " Popolazione: " + city.population + "</p>");
 			}
 		}
 	});
@@ -89,12 +89,12 @@ function infoCitta(id) {
 	$("#inserisciCitta").hide();
 	$("#formRicerca").hide();
 	$("#indietroNazioni").hide();
-	tagDiv.html("");
 	if (id != 0) {
 
 		var inputHiddenId = $("#idCitta");
 
 		$.get("/api/citta/" + id + "/find", function (jsonCity) {
+			tagDiv.html("<h1>modifica di: "+jsonCity.name+"<h1>");
 			bottoneModifica.show();
 			bottoneInserisci.hide();
 			campoRegione.val(jsonCity.district);
@@ -105,7 +105,7 @@ function infoCitta(id) {
 		});
 	}
 	else {
-
+		tagDiv.html("<h1>Inserisci<h1>");
 		bottoneModifica.hide();
 		bottoneInserisci.show();
 		campoPopolazione.val("");
@@ -177,7 +177,7 @@ function inserisciCitta() {
 		success: function (successModify) {
 			if (successModify != 0) {
 
-				alert("Inserito con successo!")
+				alert("Inserito con successo!");
 			}
 			else {
 				alert("Errore, inserimento non riuscito");

@@ -29,7 +29,7 @@
 }
 
 body{
-    background-image:url("/images/cartina.jpg");
+    background-image:url("/images/sfondo.jpg");
     height: 100%;
 
 }
@@ -65,9 +65,9 @@ body{
     color: blue;
 }
 
-.background-verde{
+.pointer{
 
-    background-color:green;
+    cursor:pointer;
 }
 
   

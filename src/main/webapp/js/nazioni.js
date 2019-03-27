@@ -11,14 +11,16 @@ function showContinenti() {
 	$.get("/api/nazioni/continenti", function (continenti, status) {
 		var inputHidden = $("#continente");//document.getElementById("continente");
 		var tagDiv = $("#content");
-		tagDiv.html("<h1 class='blu'>Continenti</h1>");
+		tagDiv.html("<div class='col-12'><h1 class='blu row justify-content-center'>Continenti</h1></div>");
 		for (var continente of continenti) {
 			var idContinente = continente.split(" ");
 			if (idContinente.length > 1) {
 				idContinente = continente.replace(continente, idContinente[0] + idContinente[1]);
 			}
 			console.log("continente: " + continente);
-			tagDiv.append("<p id='" + idContinente + "' name = '" + continente + "' class= 'col-8 btn btn-success btn-sm'>" + continente + "</p>");
+			tagDiv.append("<div class='offset-lg-4 col-lg-4 col-md-12'><p id='" + idContinente + "' name = '" + continente 
+			+ "' class= 'pointer col btn btn-success'>" + continente + "</p></div>");
+
 			$("#" + idContinente).click(function () {
 
 				console.log("continente: " + $(this).attr("name"));
@@ -42,12 +44,14 @@ function showNazioni() {
 
 		var tagDiv = $("#content")
 		var codiceNazione = $("#codiceNazioneHidden");
-		tagDiv.html("<h1 class='rosso verde'>Nazioni</h1>");
-		var contatoreId = 0;
+		tagDiv.html("<div class='col-12'><h1 class='blu row justify-content-center'>Nazioni</h1>");
 		for (nazione of nazioni) {
 
-			tagDiv.append("<p id=" + nazione.code + " class= 'btn btn-warning'>" + nazione.name +
-				"Popolazione: " + nazione.population + "</p>");
+			tagDiv.append("<div class='col-sm-6 col-lg-3 col-md-6 text-center'><div class=' card mb-4 box-shadow'>" +
+				"<div class='card-body'>" + "<h5 class='card-title '>" + nazione.name + "</h5>"
+				+ "<p class='card-text'>Popolazione: " + nazione.population + "</p>" +
+				"<a id='" + nazione.code + "' class='btn btn-info'>Esplora nazione!</a>" +
+				"</div>" + "</div>"+"</div>");
 			$("#" + nazione.code).click(function () {
 				codiceNazione.val($(this).attr("id"));
 				showCitta();
@@ -62,9 +66,9 @@ function getAllNazioni() {
 		var tagSelectRicerca = $("#listaNazioniRicerca");
 		var tagSelectModifica = $("#listaNazioniModifica");
 		for (var nazione of nazioni) {
-			tagSelectModifica.append("<option name='" + nazione.name + "' id='" + nazione.code + "'>" +
+			tagSelectModifica.append("<option name='" + nazione.name + "' class= 'btn btn-info dropdown-toggle' id='" + nazione.code + "'>" +
 				nazione.name + "</option>");
-			tagSelectRicerca.append("<option name='" + nazione.name + "' id='" + nazione.code + "'>" +
+			tagSelectRicerca.append("<option name='" + nazione.name + "' class= 'btn btn-info dropdown-toggle' id='" + nazione.code + "'>" +
 				nazione.name + "</option>");
 		}
 	});

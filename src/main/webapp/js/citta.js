@@ -13,17 +13,20 @@ function showCitta() {
 	$.get("/api/citta/" + codiceNazione + "/list", function (city, status) {
 
 		var tagDiv = $("#content");
-		tagDiv.html("<h1 class='giallo'>Citta</h1>");
+		tagDiv.html("<div class='col-12'><h1 class='blu row justify-content-center'>Nazioni</h1>");
 		for (citta of city) {
 
-			tagDiv.append("<p class= 'btn btn-success btn-sm col-7'>" + citta.name +
-				"<a id='modifica" + citta.id + "'class='btn btn-sm btn-warning col' name='" + citta.id + "'>&nbsp;&nbsp;Modifica</a>"
-				+ "<a id='elimina" + citta.id + "'class='btn btn-sm btn-danger col'name='" + citta.id + "'>&nbsp;&nbsp;Elimina</a>" + "</p>");
+			tagDiv.append("<div class='col-sm-6 col-lg-3 col-md-6 text-center'><div class=' card mb-4 box-shadow'>" +
+				"<div class='card-body'>" + "<h5 class='card-title '>" + citta.name + "</h5>" +
+				"<p class='card-text'>Popolazione: " + citta.population + "</p>" +
+				"<a id='modifica" + citta.id + "' class='btn btn-warning'>Modifica</a>" +
+				"<a id='elimina" + citta.id + "' class='btn btn-danger'>Elimina</a>" +
+				"</div>" + "</div>" + "</div>");
 			$("#elimina" + citta.id).click(function () {
-				eliminaCitta($(this).attr("name"));
+				eliminaCitta($(this).attr("id"));
 			});
 			$("#modifica" + citta.id).click(function () {
-				infoCitta($(this).attr("name"));
+				infoCitta($(this).attr("id"));
 			});
 		}
 	});
@@ -36,7 +39,7 @@ function ricercaCitta() {
 	var popolazioneMin = $("#popolazioneMin").val();
 
 	var ricercaCittaObj = new Object();
-	document.getElementById("indietroContinenti").style.display = "block";
+	$("#indietroContinenti").show();
 	ricercaCittaObj.name = campoCity;
 	ricercaCittaObj.populationMax = popolazioneMax;
 	ricercaCittaObj.populationMin = popolazioneMin;
@@ -50,29 +53,27 @@ function ricercaCitta() {
 		contentType: "application/json",
 		dataType: "json",
 		success: function (citta) {
-			//xmlhttp.onreadystatechange = function(){
-			//	if(this.readyState==4 && this.status==200){
-			//	var citta = JSON.parse(this.responseText);
 			console.log("data: " + citta);
 			var tagDiv = $("#content");
 			$("#formRicerca").hide();
-			tagDiv.html("<h1 class='blu'>Citta trovate</h1>");
+			tagDiv.html("<div class='col-12'><h1 class='blu row justify-content-center'>Citta Trovate</h1>");
 			for (var city of citta) {
-				tagDiv.append("<p class= 'btn btn-success' >" + city.name + " Popolazione: " + city.population + "</p>");
+				tagDiv.append("<div class='col-sm-6 col-lg-3 col-md-6 text-center'><div class=' card mb-4 box-shadow'>" +
+				"<div class='card-body'>" + "<h5 class='card-title '>" + city.name + "</h5>" +
+				"<p class='card-text'>Popolazione: " + city.population + "</p>");
 			}
 		}
 	});
-	//}
-	//};
-	/*xmlhttp.open("POST","/api/citta/ricerca");
-	xmlhttp.setRequestHeader("Content-Type", "application/json");
-	xmlhttp.send(jsonCitta);*/
 }
 
-function eliminaCitta(id, codiceNazione) {
+function eliminaCitta(id) {
 
+	if (id.search("elimina") != -1) {
+
+		id = id.slice(7, id.length);
+	}
 	$.post("/api/citta/" + id + "/elimina", function () {
-		showCitta(codiceNazione);
+		showCitta();
 	});
 }
 
@@ -84,17 +85,22 @@ function infoCitta(id) {
 	var campoPopolazione = $("#textPopolazione");
 	var bottoneModifica = $("#bottoneModifica");
 	var bottoneInserisci = $("#bottoneInserisci");
-	$("#formModifica").show();
 
+	$("#formModifica").show();
 	$("#inserisciCitta").hide();
 	$("#formRicerca").hide();
 	$("#indietroNazioni").hide();
+	id=id.toString();
+	if (id.search("modifica") != -1) {
+
+		id = id.slice(8, id.length);
+	}
 	if (id != 0) {
 
 		var inputHiddenId = $("#idCitta");
 
 		$.get("/api/citta/" + id + "/find", function (jsonCity) {
-			tagDiv.html("<h1>modifica di: "+jsonCity.name+"<h1>");
+			tagDiv.html("<div class='col-12'><h1 class ='blu row justify-content-center'> modifica di: " + jsonCity.name + "<h1>");
 			bottoneModifica.show();
 			bottoneInserisci.hide();
 			campoRegione.val(jsonCity.district);
@@ -105,7 +111,7 @@ function infoCitta(id) {
 		});
 	}
 	else {
-		tagDiv.html("<h1>Inserisci<h1>");
+		tagDiv.html("<div class='col-12'><h1 class ='blu row justify-content-center'>Inserisci<h1></div>");
 		bottoneModifica.hide();
 		bottoneInserisci.show();
 		campoPopolazione.val("");
